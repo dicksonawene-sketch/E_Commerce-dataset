@@ -1,0 +1,39 @@
+-- 1 Customers
+COPY customers
+FROM 'C:\Users\HP\Downloads\E_Commerce dataset\customers.csv'
+DELIMITER ','
+CSV HEADER;
+
+-- 2 Geolocation
+COPY geolocation
+FROM 'C:\Users\HP\Downloads\E_Commerce dataset\geolocation_dataset.csv'
+DELIMITER ','
+CSV HEADER;
+
+-- 3 Orders
+\copy orders FROM 'C:\Users\HP\Downloads\E_Commerce dataset\orders.csv' WITH (FORMAT csv, HEADER true, DELIMITER ',', ENCODING 'UTF8');
+-- 4 Order Items
+\copy order_items FROM 'C:\Users\HP\Downloads\E_Commerce dataset\order_items.csv' WITH (FORMAT csv, HEADER true, DELIMITER ',', ENCODING 'UTF8');
+
+-- 5 Order Payments
+\copy order_payments FROM 'C:\Users\HP\Downloads\E_Commerce dataset\order_payments.csv' WITH (FORMAT csv, HEADER true, DELIMITER ',', ENCODING 'UTF8');
+
+-- 6 Order Reviews
+\copy order_reviews FROM 'C:\Users\HP\Downloads\E_Commerce dataset\order_reviews.csv' WITH (FORMAT csv, HEADER true, DELIMITER ',', ENCODING 'UTF8');
+
+
+-- 7 Products
+\copy products FROM 'C:\Users\HP\Downloads\E_Commerce dataset\products.csv' WITH (FORMAT csv, HEADER true, DELIMITER ',', ENCODING 'UTF8');
+
+
+-- 8 Product Category Name Translation
+\copy product_category_name_translation FROM 'C:\Users\HP\Downloads\E_Commerce dataset\product_category_name_translation.csv' WITH (FORMAT csv, HEADER true, DELIMITER ',', ENCODING 'UTF8');
+
+
+-- 9 Sellers
+\copy sellers FROM 'C:\Users\HP\Downloads\E_Commerce dataset\sellers.csv' WITH (FORMAT csv, HEADER true, DELIMITER ',', ENCODING 'UTF8');
+
+--
+\copy customers FROM 'C:\Users\HP\Downloads\E_Commerce dataset\customers.csv' WITH (FORMAT csv, HEADER true, DELIMITER ',', ENCODING 'UTF8');
+
+DROP TABLE schema.customers_dataset;

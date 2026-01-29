@@ -1,0 +1,11 @@
+/.vscode
+/customers.csv
+/geolocation.csv
+/orders.csv
+/order_items.csv
+/order_payments.csv
+/order_reviews.csv
+/products.csv
+/product_category_name_translation.csv
+/sellers.csv
+/sql_course.session.sql

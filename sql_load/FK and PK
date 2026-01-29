@@ -1,0 +1,109 @@
+-- CUSTOMERS
+ALTER TABLE customers_clean
+ADD CONSTRAINT pk_customers PRIMARY KEY (customer_id);
+
+-- ORDERS
+CREATE TABLE orders_clean AS 
+SELECT DISTINCT *
+FROM orders
+WHERE order_id IS NOT NULL;
+ALTER TABLE orders_clean
+ADD CONSTRAINT pk_orders PRIMARY KEY (order_id);
+
+-- ORDER ITEMS (Composite Key)
+CREATE TABLE order_items_clean AS 
+SELECT DISTINCT *
+FROM order_items
+WHERE order_id IS NOT NULL;
+ALTER TABLE order_items_clean
+ADD CONSTRAINT pk_order_items PRIMARY KEY (order_id, order_item_id);
+
+-- ORDER PAYMENTS (Composite Key)
+ALTER TABLE order_payments
+ADD CONSTRAINT pk_order_payments PRIMARY KEY (order_id, payment_sequential);
+
+-- ORDER REVIEWS
+-- Select distint could only resolve identical rows,not rows with same review id and diffferent values in other column
+CREATE TABLE order_reviews_clean AS
+SELECT *
+FROM (
+    SELECT *,
+           ROW_NUMBER() OVER (
+               PARTITION BY review_id 
+               ORDER BY review_creation_date DESC
+           ) AS rn
+    FROM order_reviews
+    WHERE review_id IS NOT NULL
+) t
+WHERE rn = 1;
+DROP TABLE order_reviews_clean
+ALTER TABLE order_reviews_clean
+ADD CONSTRAINT pk_order_reviews PRIMARY KEY (review_id);
+
+-- PRODUCTS
+ALTER TABLE products
+ADD CONSTRAINT pk_products PRIMARY KEY (product_id);
+
+-- SELLERS
+ALTER TABLE sellers
+ADD CONSTRAINT pk_sellers PRIMARY KEY (seller_id);
+
+-- PRODUCT CATEGORY TRANSLATION
+ALTER TABLE product_category_name_translation
+ADD CONSTRAINT pk_category_translation PRIMARY KEY (product_category_name);
+
+-- GEOLOCATION (Composite Key)
+DROP TABLE geolocation_clean
+CREATE TABLE geolocation_clean AS
+SELECT *
+FROM (
+    SELECT *,
+           ROW_NUMBER() OVER (
+               PARTITION BY geolocation_zip_code_prefix
+               ORDER BY geolocation_lat, geolocation_lng
+           ) AS rn
+    FROM geolocation
+    WHERE geolocation_zip_code_prefix IS NOT NULL
+) t
+WHERE rn = 1;
+ALTER TABLE geolocation_clean
+ADD CONSTRAINT pk_geolocation PRIMARY KEY (
+    geolocation_zip_code_prefix
+);
+
+--cleaning
+CREATE TABLE customers_clean AS 
+SELECT DISTINCT *
+FROM customers
+WHERE customer_id IS NOT NULL;
+
+DROP TABLE customers;
+DROP TABLE geolocation;
+DROP TABLE order_items;
+DROP TABLE order_reviews;
+DROP TABLE orders;
+
+ALTER TABLE orders_clean
+ADD CONSTRAINT fk_orders_cleans_customers_clean
+FOREIGN KEY (customer_id) REFERENCES customers_clean(customer_id);
+
+ALTER TABLE order_items_clean
+ADD CONSTRAINT fk_items_orders_clean
+FOREIGN KEY (order_id) REFERENCES orders_clean(order_id);
+
+ALTER TABLE order_items_clean
+ADD CONSTRAINT fk_items_products
+FOREIGN KEY (product_id) REFERENCES products(product_id);
+
+ALTER TABLE order_items_clean
+ADD CONSTRAINT fk_items_sellers
+FOREIGN KEY (seller_id) REFERENCES sellers(seller_id);
+
+ALTER TABLE order_payments
+ADD CONSTRAINT fk_payments_orders_clean
+FOREIGN KEY (order_id) REFERENCES orders_clean(order_id);
+
+ALTER TABLE order_reviews_clean
+ADD CONSTRAINT fk_reviews_orders_clean
+FOREIGN KEY (order_id) REFERENCES orders_clean(order_id);
+
