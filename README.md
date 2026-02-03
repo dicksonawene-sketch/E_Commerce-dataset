@@ -87,7 +87,7 @@ Through this project, I developed:
 - Iterative **debugging and correction techniques**  
 - Cohort analysis and time-based aggregation thinking  
 - Analytical reasoning: validating results rather than assuming correctness  
-
+-SQL joins are row-based, unlike Excel joins which are column-fixed. Understanding this completely changed how I approach relational data.
 I also learned that **intentional practice with challenging problems** accelerates learning more than easy, guided exercises.
 
 ---
