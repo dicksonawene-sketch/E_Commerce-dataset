@@ -73,10 +73,6 @@ I treated this as part of the learning process — intentionally “claiming” 
 **Goal:** Measure frequency of each delivery outcome  
 **Why:** Highlights operational risks
 
-### Query 10 – Integrated Business Summary
-**Goal:** Combine insights across revenue, customers, and delivery  
-**Why:** Produces a clear, business-ready overview
-
 ---
 
 ## What I Learned
