@@ -27,13 +27,13 @@ ADD CONSTRAINT pk_order_payments PRIMARY KEY (order_id, payment_sequential);
 CREATE TABLE order_reviews_clean AS
 SELECT *
 FROM (
-    SELECT *,
-           ROW_NUMBER() OVER (
-               PARTITION BY review_id 
-               ORDER BY review_creation_date DESC
-           ) AS rn
-    FROM order_reviews
-    WHERE review_id IS NOT NULL
+SELECT *,
+ROW_NUMBER() OVER (
+PARTITION BY review_id 
+ORDER BY review_creation_date DESC
+) AS rn
+FROM order_reviews
+WHERE review_id IS NOT NULL
 ) t
 WHERE rn = 1;
 DROP TABLE order_reviews_clean
@@ -57,18 +57,18 @@ DROP TABLE geolocation_clean
 CREATE TABLE geolocation_clean AS
 SELECT *
 FROM (
-    SELECT *,
-           ROW_NUMBER() OVER (
-               PARTITION BY geolocation_zip_code_prefix
-               ORDER BY geolocation_lat, geolocation_lng
-           ) AS rn
-    FROM geolocation
-    WHERE geolocation_zip_code_prefix IS NOT NULL
+SELECT *,
+ROW_NUMBER() OVER (
+PARTITION BY geolocation_zip_code_prefix
+ORDER BY geolocation_lat, geolocation_lng
+) AS rn
+FROM geolocation
+WHERE geolocation_zip_code_prefix IS NOT NULL
 ) t
 WHERE rn = 1;
 ALTER TABLE geolocation_clean
 ADD CONSTRAINT pk_geolocation PRIMARY KEY (
-    geolocation_zip_code_prefix
+geolocation_zip_code_prefix
 );
 
 --cleaning
